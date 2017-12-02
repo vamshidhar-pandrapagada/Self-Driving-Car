@@ -122,7 +122,7 @@ Below is the model pipeline design in brief:
 Convolution 3, Convolution 4, Convolution 5, Flatten and all Fully Connected Layers use Dropout regularization.    
 All layers use the weights initially being initialized from a truncated normal distribution with a 0 mean and a
 standard deviation of 0.01.
-![NVIDIA ARchitecture](NVIDIA CNN Architecture.jpg)
+![NVIDIA ARchitecture](NVIDIA_CNN_Architecture.jpg)
 
 
 ### Hyper Parameters
@@ -142,7 +142,7 @@ Training the neural network with large number of images loaded into memory may s
 Keras supports a function model.fit_generator which trains the network using the small size chunk of images at a time yielded by the generator function and destroys them saving memory.  
 After training for 35 epochs on 17,856 images using a batch size of 32, the model yielded the following results.  
 
-![](Loss Graph.jpg)
+![](Loss_Graph.jpg)
 
 ### Model Performance
 Training Data was collected on Track 1. Using the model's steering predictions, the autonomous car was able to drive well following the course of the track. 
