@@ -159,7 +159,7 @@ When training a model, it is often recommended to lower the learning rate as the
 Training the neural network with large number of images loaded into memory may slow down the entire process. Data generator functions in python are used to mitigate this problem by reading the required set of images in chunks using the batch size.
 
 Keras supports a function model.fit_generator which trains the network using the small size chunk of images at a time yielded by the generator function and destroys them saving memory.  
-After training for 35 epochs on 17,856 images using a batch size of 32, the model yielded the following results.  
+After training for 45 epochs on 17,856 images using a batch size of 32, the model yielded the following results.  
 
 ![](Loss_Graph.jpg)
 
