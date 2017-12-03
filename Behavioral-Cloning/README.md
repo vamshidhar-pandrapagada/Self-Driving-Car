@@ -51,6 +51,9 @@ Using data from 3 cameras with correction factors applied to steering angles is 
 In this step of augmentation, adjust the brightness of the images by selecting a random intensity level for each image.
 Intensity level is selected at random to simulate different sunlight conditions in a day. A darker intensity can be as close to driving at night.  
 
+Open CV reads images in BGR format. We  first conver images from BGR to HSV(Hue-Saturation-Value) and randomly alter V value to change brightenss and finally convert the image back to RGB.  
+Drive.py in autonomous mode also gets the images from simulator using PIL image library which reads in RGB format.
+
 Here are few examples of images after adjusting the brightness.  
 ![png](output_9_0.png)  
 
@@ -94,40 +97,56 @@ Data Collection and Augmentation resulted in a total of 23,760 images. A total o
 ## Model Pipeline
 Once we have the necessary training images ready (after the data augmentation), construct the model pipeline to train the neural network.  
 
-**Data Normalization** : As for any data-set, image data has been normalized so that the numerical range of the pixels is between -1 and 1.  
-**Model Pipeline**: 
+**Data Normalization** : As for any data-set, image data has been normalized so that the numerical rangeof the pixels is between -1 and 1.  
+**Model Pipeline in Brief**:  Inputs size fed to the model pipeline is 160 x 320 x 3 and cropped to get rid of noise (SKY and HOOD of the car) to get to a size of 88 x 320 x 3.  
+This architecture used here very similar to the one published by autonomous vehicle team in NVIDIA. [End-to-End Deep Learning for Self-Driving Cars](https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/).  
 
-This architecture used here is published by autonomous vehicle team in NVIDIA. [End-to-End Deep Learning for Self-Driving Cars](https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/).  
-Below is the model pipeline design in brief:
+![NVIDIA ARchitecture](NVIDIA_CNN_Architecture.jpg)
+
+The model follows a [The All Convolutional Net](https://arxiv.org/abs/1412.6806). Max-pooling layers are simply replaced by a convolutional layer with increased stride without loss in accuracy. This yielded competitive or state of the art performance on several object recognition datasets (CIFAR-10, CIFAR-100, ImageNet).
+
+After several attempts, [**Spatial Dropout**](https://arxiv.org/pdf/1411.4280.pdf) generalization on third and fourth convolutions followed by regular dropout on fisth convolution provided least loss on validation set.
+
+Our network is fully convolutional and images exhibit strong spatial correlation, the feature map activations are also strongly correlated. In the standard dropout implementation, network activations are "dropped-out" during training with independent probability without considering the spatial correlation.
+
+On the other hand Spatial dropout extends the dropout value across the entire feature map. Therefore, adjacent pixels in the dropped-out feature map are either all 0 (dropped-out) or all active. This technique proved to be very effective and improves performance
+
+**Maxpool** layer is used only on the last convolution layer with regular drop out.
+
+**Model Pipeline Construction:**
 
 1. Input Image: 160 x 320 x 3
-2. Cropped Image: 106 x 320 x 3
+2. Cropped Image: 88 x 320 x 3
 3. Normalization Lambda Layer
-4. Convolution 1: Kernel size = 5, Feature maps = 24, Strides = 1, Padding = SAME, Output Image: 106 x 320 x 24, Weights Initializer = Truncated Normal, Activation = ELU
-5. Maxpool Layer 1: Kernel size = 2, Strides = 2, Padding = 'VALID', Output Image: 53 x 160 x 24
-6. Convolution 2: Kernel size = 5, Feature maps = 36, Strides = 1, Padding = SAME, Output Image: 53 x 160 x 36, Weights Initializer = Truncated Normal, Activation = ELU
-7. Maxpool Layer 2: Kernel size = 2, Strides = 2, Padding = 'VALID', Output Image: 26 x 80 x 36
-8. Convolution 3: Kernel size = 5, Feature maps = 48, Strides = 1, Padding = SAME, Output Image: 26 x 80 x 48, Weights Initializer = Truncated Normal, Activation = ELU
-9. Maxpool Layer 3: Kernel size = 2, Strides = 2, Padding = 'VALID', Output Image: 13 x 40 x 48
-10. Convolution 4: Kernel size = 3, Feature maps = 64, Strides = 1, Padding = SAME, Output Image: 13 x 40 x 64, Weights Initializer = Truncated Normal, Activation = ELU
-11. Maxpool Layer 4: Kernel size = 1, Strides = 1, Padding = 'VALID', Output Image: 13 x 40 x 64
-12. Convolution 5: Kernel size = 3, Feature maps = 64, Strides = 1, Padding = SAME, Output Image: 13 x 40 x 64, Weights Initializer = Truncated Normal, Activation = ELU
-13. Maxpool Layer 5: Kernel size = 1, Strides = 1, Padding = 'VALID', Output Image: 13 x 40 x 64
-14. Flatten : Output = 33280 neurons, Activation = ELU
-15. Fully Connected Layer 1: Output = 100 neurons, Activation = ELU
-16. Fully Connected Layer 2: Output = 50 neurons, Activation = ELU
-17. Fully Connected Layer 3: Output = 10 neurons, Activation = ELU
-18. Output Fully Connected Layer: Output = 1 neurons (no of labels)
+4. Convolution 1: Kernel size = 5, Feature maps = 24, Strides = 1, Padding = SAME, Output Image: 88 x 320 x 24, Weights Initializer = Truncated Normal, Activation = ELU
+5. Convolution 2: Kernel size = 5, Feature maps = 24, Strides = 2, Padding = SAME, Output Image: 44 x 160 x 24, Weights Initializer = Truncated Normal, Activation = None
+6. Convolution 3: Kernel size = 5, Feature maps = 36, Strides = 1, Padding = SAME, Output Image: 44 x 160 x 36, Weights Initializer = Truncated Normal, Activation = ELU
+7. Convolution 4: Kernel size = 5, Feature maps = 36, Strides = 2, Padding = SAME, Output Image: 22 x 80 x 36, Weights Initializer = Truncated Normal, Activation = None
+8. Convolution 5: Kernel size = 5, Feature maps = 48, Strides = 1, Padding = SAME, Output Image: 22 x 80 x 48, Weights Initializer = Truncated Normal, Activation = ELU
+9. Convolution 6: Kernel size = 5, Feature maps = 48, Strides = 2, Padding = SAME, Output Image: 11 x 40 x 48, Weights Initializer = Truncated Normal, Activation = None
+10. Spatial Drop out with probability 0.3
+11. Convolution 7: Kernel size = 3, Feature maps = 64, Strides = 1, Padding = SAME, Output Image: 11 x 40 x 64, Weights Initializer = Truncated Normal, Activation = ELU
+12. Spatial Drop out with probability 0.3
+13. Convolution 8: Kernel size = 3, Feature maps = 64, Strides = 1, Padding = SAME, Output Image: 11 x 40 x 64, Weights Initializer = Truncated Normal, Activation = ELU
+13. Maxpool Layer 1: Kernel size = 1, Strides = 1, Padding = 'VALID', Output Image: 11 x 40 x 64
+14. Drop out probability 0.3
+15. Flatten : Output = 28160 neurons, Activation = ELU
+16. Drop out probability 0.3
+17. Fully Connected Layer 1: Output = 100 neurons, Activation = ELU
+18. Fully Connected Layer 2: Output = 50 neurons, Activation = ELU
+19. Fully Connected Layer 3: Output = 10 neurons, Activation = ELU
+20. Output Fully Connected Layer: Output = 1 neurons
 
-Convolution 3, Convolution 4, Convolution 5, Flatten and all Fully Connected Layers use Dropout regularization.    
-All layers use the weights initially being initialized from a truncated normal distribution with a 0 mean and a
+Convolution 6 and Convolution 7 use Spatial Dropout. Convolution 8 and Flatten use regular Dropout regularization.    
+All layers use the weights initially being initialised from a truncated normal distribution with a 0 mean and a
 standard deviation of 0.01.
-![NVIDIA ARchitecture](NVIDIA_CNN_Architecture.jpg)
+
+
 
 
 ### Hyper Parameters
 
-1. The number of epochs used: 35
+1. The number of epochs used: 45
 2. Learning Rate: 0.01. 
 3. Batch size : 32  
 4. Momentum: 0.9
