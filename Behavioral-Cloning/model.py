@@ -21,6 +21,7 @@ import matplotlib.pyplot as plt
 import random
 import tensorflow as tf
 import math
+from keras.layers.core import SpatialDropout2D
 
 
 class BehaviorCloning(object):
@@ -58,10 +59,9 @@ class BehaviorCloning(object):
         Return:
          generator Yield:   Images and Labels   
         
-        Step 1: Read Image and Convert to YUV
-        Step 2: Crop Image (Left, Right and Center)
-        Step 3: Calculate the Steer angle using the correction factor
-        Step 4: Invoke data_augment function
+        Step 1: Read Image         
+        Step 2: Calculate the Steer angle using the correction factor
+        Step 3: Invoke data_augment function
        
         """
         
@@ -79,13 +79,12 @@ class BehaviorCloning(object):
                 for row in samples[idx: idx + batch_size]:
                      for camera in range(3):
                          img_read = cv2.imread(row[camera])
-                         img_read = cv2.cvtColor(img_read, cv2.COLOR_RGB2YUV)
-                         
+                                                  
                          #Crop Image to get rid of SKY and Car Hood
-                         img_shape = img_read.shape                         
-                         top_crop = math.floor(img_shape[0]/5)
-                         bottom_crop = img_shape[0]-22
-                         img_read = img_read[top_crop:bottom_crop, 0:img_shape[1]]
+                         #img_shape = img_read.shape                         
+                         #top_crop = math.floor(img_shape[0]/5)
+                         #bottom_crop = img_shape[0]-22
+                         #img_read = img_read[top_crop:bottom_crop, 0:img_shape[1]]
                                                   
                          
                          images.append(img_read)
@@ -116,6 +115,9 @@ class BehaviorCloning(object):
          Augmented Images and Labels 
         
         Step 1: Randomly Adjust Brightness of images using random brightness value
+                Generator function uses CV2 to read images in BGR format 
+                Convert images to HSV(Hue-Saturation-Value), randomly alter V value and convert back to RGB
+                Drive.py gets the images from simulator using PIL image and is also read in RGB format
         Step 2: Randomly shift the image virtially and horizontally and adjust the steeing angle using correction factor
         Step 3: Randomly select images and Flip them and append to main Set
         Step 4: Return Augmented Images and Labels
@@ -129,7 +131,8 @@ class BehaviorCloning(object):
         for idx, img in enumerate(images):
             
             ##Randomly Adjust Brightness of images 
-            new_img = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
+            #
+            new_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
             brightness_level = (0.2 * np.random.uniform()) + 0.4
             new_img[:,:,2] = new_img[:,:,2] * brightness_level
             new_img = cv2.cvtColor(new_img, cv2.COLOR_HSV2RGB)
@@ -178,44 +181,70 @@ class BehaviorCloning(object):
        
         Args:
          input_shape: shape of the input image    
+         
+        Step 1: Normalize the pixel values to a range between -1 and 1
+        Step 2: Crop Image: If you observe the images plotted , almost 1/5th of the image from the top is the sky 
+        and around 20 pixels from the bottom is the hood of the car. These pixels provide no added value to the 
+        neural network. 
+        Cropping the image to get rid of these pixels will help the neural network look only at the road as the car moves.
+        Step 3: Build Model Pipleline        
+        
+        The model follows The All Convolutional Net achitecture.
+        Max-pooling layers are simply replaced by a convolutional layer with increased stride without loss in accuracy. 
+        This yielded competitive or state of the art performance on several object 
+        recognition datasets (CIFAR-10, CIFAR-100, ImageNet).
+
+        After several attempts, Spatial Dropout regularization on third and fourth convolutions followed by regular dropout 
+        on fisth convolution provided least loss on validation set.
+
+        Our network is fully convolutional and images exhibit strong spatial correlation, the feature map activations 
+        are also strongly correlated. In the standard dropout implementation, network activations are "dropped-out" 
+        during training with independent probability without considering the spatial correlation.
+
+        On the other hand Spatial dropout extends the dropout value across the entire feature map. 
+        Therefore, adjacent pixels in the dropped-out feature map are either all 0 (dropped-out) or all active. 
+        This technique proved to be very effective and improves performance
+
+        Maxpool layer is used only on the last convolution layer with regular drop out.
+        
         """
         
         self.model = Sequential()
         
         #As for any data-set, image data has been normalized so that the numerical rangeof the pixels is between -1 and 1.
         self.model.add(Lambda(lambda x: x/127.5 - 1.0,  input_shape = input_shape))
+        self.model.add(Cropping2D(cropping=((50,22), (0,0))))
                
         self.model.add(Conv2D(filters = 24, kernel_size = (5,5), padding = 'same', 
-                              kernel_initializer= 'truncated_normal'))
-        #self.model.add(BatchNormalization())
+                              kernel_initializer= 'truncated_normal'))        
         self.model.add(Activation('elu'))
-        self.model.add(MaxPooling2D(pool_size=(2,2)))
-        #self.model.add(Dropout(0.2))
+        self.model.add(Conv2D(filters = 24, kernel_size = (5,5), strides = (2,2), padding = 'same', 
+                              kernel_initializer= 'truncated_normal'))   
+        
         
         self.model.add(Conv2D(filters = 36, kernel_size = (5,5), padding = 'same', 
-                              kernel_initializer= 'truncated_normal'))
-        #self.model.add(BatchNormalization())
+                              kernel_initializer= 'truncated_normal'))        
         self.model.add(Activation('elu'))
-        self.model.add(MaxPooling2D(pool_size=(2,2)))
-        #self.model.add(Dropout(0.2))
+        self.model.add(Conv2D(filters = 36, kernel_size = (5,5), strides = (2,2), padding = 'same', 
+                              kernel_initializer= 'truncated_normal'))   
+        
         
         self.model.add(Conv2D(filters = 48, kernel_size = (5,5), padding = 'same', 
                               kernel_initializer= 'truncated_normal'))
-        #self.model.add(BatchNormalization())
+        
         self.model.add(Activation('elu'))
-        self.model.add(MaxPooling2D(pool_size=(2,2)))
-        self.model.add(Dropout(0.3))
+        self.model.add(Conv2D(filters = 48, kernel_size = (5,5), strides = (2,2), padding = 'same', 
+                              kernel_initializer= 'truncated_normal'))           
+        self.model.add(SpatialDropout2D(0.3))
+        
+        self.model.add(Conv2D(filters = 64, kernel_size = (3,3), padding = 'same', 
+                              kernel_initializer= 'truncated_normal'))        
+        self.model.add(Activation('elu'))                
+        self.model.add(SpatialDropout2D(0.3))
         
         self.model.add(Conv2D(filters = 64, kernel_size = (3,3), padding = 'same', 
                               kernel_initializer= 'truncated_normal'))
-        #self.model.add(BatchNormalization())
-        self.model.add(Activation('elu'))
-        self.model.add(MaxPooling2D(pool_size=(1,1)))
-        self.model.add(Dropout(0.3))
         
-        self.model.add(Conv2D(filters = 64, kernel_size = (3,3), padding = 'same', 
-                              kernel_initializer= 'truncated_normal'))
-        #self.model.add(BatchNormalization())
         self.model.add(Activation('elu'))
         self.model.add(MaxPooling2D(pool_size=(1,1)))
         self.model.add(Dropout(0.3))
@@ -227,19 +256,16 @@ class BehaviorCloning(object):
 
         
         self.model.add(Dense(100,kernel_initializer= 'truncated_normal'))
-        #self.model.add(BatchNormalization())
         self.model.add(Activation('elu'))
-        self.model.add(Dropout(0.5))
+        
 
         self.model.add(Dense(50, kernel_initializer= 'truncated_normal'))
-        #self.model.add(BatchNormalization())
         self.model.add(Activation('elu'))
-        self.model.add(Dropout(0.5))
+        
         
         self.model.add(Dense(10, kernel_initializer= 'truncated_normal'))
-        #self.model.add(BatchNormalization())
         self.model.add(Activation('elu'))
-        self.model.add(Dropout(0.5))
+        
 
         self.model.add(Dense(1))
               
