@@ -1,8 +1,3 @@
-﻿---
-output:
-  pdf_document: default
-  html_document: default
----
 
 # Vehicle Detection Project
 
@@ -109,11 +104,11 @@ plt.title('Not Car 3')
 
 
 
-![png](/Markdown/output_5_1.png)
+![png](/Markdown_files/output_5_1.png)
 
 
 
-![png](output_5_2.png)
+![png](/Markdown_files/output_5_2.png)
 
 
 ## Step 3: Feature Selection
@@ -189,7 +184,9 @@ def plot3d(pixels, colors_rgb,
     return ax  # return Axes3D object for further manipulation
 ```
 
-#### Plot the image on different color spaces
+### Plot the image on different color spaces
+
+#### RGB Color Space
 
 
 ```python
@@ -209,16 +206,18 @@ plt.show()
 ```
 
 
-![png](output_12_0.png)
+![png](/Markdown_files/output_12_0.png)
 
 
 
-![png](output_12_1.png)
+![png](/Markdown_files/output_12_1.png)
 
 
 
-![png](output_12_2.png)
+![png](/Markdown_files/output_12_2.png)
 
+
+#### HSV Color Space
 
 
 ```python
@@ -232,12 +231,14 @@ plt.show()
 ```
 
 
-![png](output_13_0.png)
+![png](/Markdown_files/output_14_0.png)
 
 
 
-![png](output_13_1.png)
+![png](/Markdown_files/output_14_1.png)
 
+
+#### LUV Color Space
 
 
 ```python
@@ -251,12 +252,14 @@ plt.show()
 ```
 
 
-![png](output_14_0.png)
+![png](/Markdown_files/output_16_0.png)
 
 
 
-![png](output_14_1.png)
+![png](/Markdown_files/output_16_1.png)
 
+
+#### YCrCb Color Space
 
 
 ```python
@@ -270,11 +273,11 @@ plt.show()
 ```
 
 
-![png](output_15_0.png)
+![png](/Markdown_files/output_18_0.png)
 
 
 
-![png](output_15_1.png)
+![png](/Markdown_files/output_18_1.png)
 
 
 After exploring different color spaces, it appears that the pixels in LUV color space appear to cluster well for car images. Hence our desired color space for generating features is LUV. 
@@ -350,11 +353,11 @@ hist_features = color_hist(img_converted, nbins=32, bins_range=(0, 256), plot = 
 ```
 
 
-![png](output_19_0.png)
+![png](/Markdown_files/output_22_0.png)
 
 
 
-![png](output_19_1.png)
+![png](/Markdown_files/output_22_1.png)
 
 
 ### Step 3.3: Spatial Binning
@@ -405,19 +408,19 @@ spatial_features = bin_spatial(img_converted, size=(32, 32), plot = True)
 ```
 
 
-![png](output_21_0.png)
+![png](/Markdown_files/output_24_0.png)
 
 
 
-![png](output_21_1.png)
+![png](/Markdown_files/output_24_1.png)
 
 
 
-![png](output_21_2.png)
+![png](/Markdown_files/output_24_2.png)
 
 
 
-![png](output_21_3.png)
+![png](/Markdown_files/output_24_3.png)
 
 
 ### Step 3.4: Histogram of Oriented Gradient features
@@ -572,27 +575,27 @@ for i in range(3):
 ```
 
 
-![png](output_24_0.png)
+![png](/Markdown_files/output_27_0.png)
 
 
 
-![png](output_24_1.png)
+![png](/Markdown_files/output_27_1.png)
 
 
 
-![png](output_24_2.png)
+![png](/Markdown_files/output_27_2.png)
 
 
 
-![png](output_24_3.png)
+![png](/Markdown_files/output_27_3.png)
 
 
 
-![png](output_24_4.png)
+![png](/Markdown_files/output_27_4.png)
 
 
 
-![png](output_24_5.png)
+![png](/Markdown_files/output_27_5.png)
 
 
 Tried the following combinations of HOG parameters
@@ -945,8 +948,38 @@ if model_train_YN:
     Features Tensor Shape
     [None, 4356]
     Training 3 layer Feed forward Neural Network classifier
-    Epoch: 0    - Cost: 0.27     Training Accuracy: 0.953 Validation Accuracy: 0.981
-    Epoch: 1    - Cost: 0.56     Training Accuracy: 0.977 Validation Accuracy: 0.981
+    Epoch: 0    - Cost: 0.129    Training Accuracy: 0.98  Validation Accuracy: 0.974
+    Epoch: 1    - Cost: 0.286    Training Accuracy: 0.988 Validation Accuracy: 0.985
+    Epoch: 2    - Cost: 0.0286   Training Accuracy: 0.992 Validation Accuracy: 0.991
+    Epoch: 3    - Cost: 0.223    Training Accuracy: 0.98  Validation Accuracy: 0.993
+    Epoch: 4    - Cost: 0.0292   Training Accuracy: 0.992 Validation Accuracy: 0.989
+    Epoch: 5    - Cost: 0.0113   Training Accuracy: 0.996 Validation Accuracy: 0.995
+    Epoch: 6    - Cost: 0.00575  Training Accuracy: 0.996 Validation Accuracy: 0.994
+    Epoch: 7    - Cost: 0.00646  Training Accuracy: 0.992 Validation Accuracy: 0.996
+    Epoch: 8    - Cost: 0.0173   Training Accuracy: 0.988 Validation Accuracy: 0.991
+    Epoch: 9    - Cost: 0.00184  Training Accuracy: 0.996 Validation Accuracy: 0.994
+    Epoch: 10   - Cost: 0.0137   Training Accuracy: 0.996 Validation Accuracy: 0.992
+    Epoch: 11   - Cost: 0.0137   Training Accuracy: 0.992 Validation Accuracy: 0.99 
+    Epoch: 12   - Cost: 0.00141  Training Accuracy: 0.996 Validation Accuracy: 0.994
+    Epoch: 13   - Cost: 0.0171   Training Accuracy: 0.984 Validation Accuracy: 0.996
+    Epoch: 14   - Cost: 0.0806   Training Accuracy: 1.0   Validation Accuracy: 0.996
+    Epoch: 15   - Cost: 0.00709  Training Accuracy: 1.0   Validation Accuracy: 0.996
+    
+
+
+![png](/Markdown_files/output_37_1.png)
+
+
+
+![png](/Markdown_files/output_37_2.png)
+
+
+    Neural_Network Test Set Accuracy: 0.994020
+    Neural_Network Test Set Precision: 0.996081
+    Neural_Network Test Set Recall: 0.995481
+    Neural_Network Test Set Sensitivity: 0.995481
+    Neural_Network Test Set Specificity: 0.990462
+    102.69 Seconds to train Neural Network...
     
 
 ### Step 4.5: Train the Model using SVM
@@ -970,28 +1003,24 @@ if model_train_YN:
     model_train(X, y) 
 ```
 
-    Reading Image Paths
-    Extracting Features from images
-    Augmenting Not Car Images
-    Total Number of Car Images: 8792
-    Total Number of Non Car Images: 22420
-    Features Shape:  (31212, 8460) (31212,)
+    Reading features from disk
+    Features Shape:  (31212, 4356) (31212,)
     Splitting Features into Train and test Setsl
-    Train, Test Shapes:  (21848, 8460) (9364, 8460)
+    Train, Test Shapes:  (21848, 4356) (9364, 4356)
     Training the Model
-    Test Accuracy of SVC =  0.9776
-    39.08 Seconds to train SVC...
+    Test Accuracy of SVC =  0.9755
+    19.22 Seconds to train SVC...
     
 
 
-![png](output_36_1.png)
+![png](/Markdown_files/output_39_1.png)
 
 
-    SVM Classifier Accuracy: 0.977574
-    SVM Classifier Precision: 0.983109
-    SVM Classifier Recall: 0.985738
-    SVM Classifier Sensitivity: 0.985738
-    SVM Classifier Specificity: 0.956703
+    SVM Classifier Accuracy: 0.975545
+    SVM Classifier Precision: 0.976799
+    SVM Classifier Recall: 0.989439
+    SVM Classifier Sensitivity: 0.989439
+    SVM Classifier Specificity: 0.940174
     
 
 ### Step 4.6: Train the Model using SGD
@@ -1016,27 +1045,27 @@ if model_train_YN:
 ```
 
     Reading features from disk
-    Features Shape:  (17760, 4356) (17760,)
+    Features Shape:  (31212, 4356) (31212,)
     Splitting Features into Train and test Setsl
-    Train, Test Shapes:  (12432, 4356) (5328, 4356)
+    Train, Test Shapes:  (21848, 4356) (9364, 4356)
     Training the Model
-    Test Accuracy of SGD =  0.9878
-    256.88 Seconds to train SGD...
+    Test Accuracy of SGD =  0.9621
+    457.14 Seconds to train SGD...
     
 
 
-![png](output_38_1.png)
+![png](/Markdown_files/output_41_1.png)
 
 
 
-![png](output_38_2.png)
+![png](/Markdown_files/output_41_2.png)
 
 
-    SGD Classifier Accuracy: 0.987800
-    SGD Classifier Precision: 0.986343
-    SGD Classifier Recall: 0.988969
-    SGD Classifier Sensitivity: 0.988969
-    SGD Classifier Specificity: 0.986662
+    SGD Classifier Accuracy: 0.962089
+    SGD Classifier Precision: 0.958171
+    SGD Classifier Recall: 0.990310
+    SGD Classifier Sensitivity: 0.990310
+    SGD Classifier Specificity: 0.890813
     
 
 ### Step 4.7: Model Selection
@@ -1348,8 +1377,6 @@ x_start_stop=[None, None]
 y_start_stop_list = [[400,470], [400,470],[400,550],[420,580], [400,656],[500,656], [410,550], [500,656],[500,656]]
 #scales = [1.0, 1.5, 1.5, 1.5, 1.0, 2.0, 2.0, 1.5]
 scales = [0.5, 1.0, 1.5, 1.5, 1.5, 1.0, 2.0, 2.0, 1.5]
-model_name = 'Neural_Network'
-logging.getLogger("tensorflow").setLevel(logging.WARNING)
 ```
 
 ### 5.5 Make Predictions
@@ -1360,9 +1387,77 @@ Images below show the results on all test images.
     1. Image on the left shows all the positive detections at various scales and search locations.
     2. Image on the center is the heatmap of all positive detections.
     3. Image on the right is constructed bounding boxes to cover the area of each blob detected. First step is to threshold the map to identify vehicle positions. Then use scipy.ndimage.measurements.label() to identify individual blobs in the heatmap. Then assume each blob corresponded to a vehicle. Finally construct bounding boxes to cover the area of each blob detected.
+    
+### Test Neural Network Performance
 
 
 ```python
+model_name = 'Neural_Network'
+logging.getLogger("tensorflow").setLevel(logging.WARNING)
+test_images_paths  = glob.glob('test_images/*.jpg') 
+plot_detections = True
+for path in test_images_paths:
+    test_image = mpimg.imread(path)
+    final_image = model_test(test_image)
+```
+
+    4 cars found
+    0 cars found
+    1 cars found
+    2 cars found
+    0 cars found
+    0 cars found
+    2 cars found
+    2 cars found
+    2 cars found
+    2 cars found
+    
+
+
+![png](/Markdown_files/output_52_1.png)
+
+
+
+![png](/Markdown_files/output_52_2.png)
+
+
+
+![png](/Markdown_files/output_52_3.png)
+
+
+
+![png](/Markdown_files/output_52_4.png)
+
+
+
+![png](/Markdown_files/output_52_5.png)
+
+
+
+![png](/Markdown_files/output_52_6.png)
+
+
+
+![png](/Markdown_files/output_52_7.png)
+
+
+
+![png](/Markdown_files/output_52_8.png)
+
+
+
+![png](/Markdown_files/output_52_9.png)
+
+
+
+![png](/Markdown_files/output_52_10.png)
+
+
+### Test SVM Model Performance
+
+
+```python
+model_name = 'SVM'
 test_images_paths  = glob.glob('test_images/*.jpg') 
 plot_detections = True
 for path in test_images_paths:
@@ -1373,60 +1468,132 @@ for path in test_images_paths:
     4 cars found
     0 cars found
     2 cars found
-    4 cars found
+    3 cars found
     0 cars found
-    1 cars found
-    4 cars found
-    4 cars found
     2 cars found
-    4 cars found
+    2 cars found
+    3 cars found
+    2 cars found
+    2 cars found
     
 
 
-![png](output_49_1.png)
+![png](/Markdown_files/output_54_1.png)
 
 
 
-![png](output_49_2.png)
+![png](/Markdown_files/output_54_2.png)
 
 
 
-![png](output_49_3.png)
+![png](/Markdown_files/output_54_3.png)
 
 
 
-![png](output_49_4.png)
+![png](/Markdown_files/output_54_4.png)
 
 
 
-![png](output_49_5.png)
+![png](/Markdown_files/output_54_5.png)
 
 
 
-![png](output_49_6.png)
+![png](/Markdown_files/output_54_6.png)
 
 
 
-![png](output_49_7.png)
+![png](/Markdown_files/output_54_7.png)
 
 
 
-![png](output_49_8.png)
+![png](/Markdown_files/output_54_8.png)
 
 
 
-![png](output_49_9.png)
+![png](/Markdown_files/output_54_9.png)
 
 
 
-![png](output_49_10.png)
+![png](/Markdown_files/output_54_10.png)
 
+
+### Test SGD Model Performance
+
+
+```python
+model_name = 'SGD'
+test_images_paths  = glob.glob('test_images/*.jpg') 
+plot_detections = True
+for path in test_images_paths:
+    test_image = mpimg.imread(path)
+    final_image = model_test(test_image)
+```
+
+    1 cars found
+    0 cars found
+    1 cars found
+    2 cars found
+    1 cars found
+    0 cars found
+    3 cars found
+    1 cars found
+    2 cars found
+    3 cars found
+    
+
+
+![png](/Markdown_files/output_56_1.png)
+
+
+
+![png](/Markdown_files/output_56_2.png)
+
+
+
+![png](/Markdown_files/output_56_3.png)
+
+
+
+![png](/Markdown_files/output_56_4.png)
+
+
+
+![png](/Markdown_files/output_56_5.png)
+
+
+
+![png](/Markdown_files/output_56_6.png)
+
+
+
+![png](/Markdown_files/output_56_7.png)
+
+
+
+![png](/Markdown_files/output_56_8.png)
+
+
+
+![png](/Markdown_files/output_56_9.png)
+
+
+
+![png](/Markdown_files/output_56_10.png)
+
+
+It is very evident that Neural Network classifier outperforms both Support Vector Machine classifier and Stochastic Gradient Descent classifier. Hence, we'll use Neural Network to test on Project videos.
 
 ## Step 6: Test on Test Video
 
 
 ```python
+model_name = 'Neural_Network'
+logging.getLogger("tensorflow").setLevel(logging.WARNING)
 plot_detections = False
+```
+
+
+```python
 test_movie_output =  'Videos/test_video_output.mp4'   
 clip = VideoFileClip('Videos/test_video.mp4')
 image_clip = clip.fl_image(model_test)
@@ -1437,13 +1604,13 @@ image_clip = clip.fl_image(model_test)
     [MoviePy] Writing video Videos/test_video_output.mp4
     
 
-     97%|███████████████████████████████████████████████████████████████████████████████▉  | 38/39 [01:59<00:03,  3.16s/it]
+     97%|███████████████████████████████████████████████████████████████████████████████▉  | 38/39 [00:51<00:01,  1.35s/it]
     
 
     [MoviePy] Done.
     [MoviePy] >>>> Video ready: Videos/test_video_output.mp4 
     
-    Wall time: 2min
+    Wall time: 52 s
     
 
 
@@ -1476,6 +1643,19 @@ image_clip = clip3.fl_image(model_test)
 %time image_clip.write_videofile(project_video_output, audio=False)
 ```
 
+    [MoviePy] >>>> Building video Videos/project_video_output.mp4
+    [MoviePy] Writing video Videos/project_video_output.mp4
+    
+
+    100%|█████████████████████████████████████████████████████████████████████████████▉| 1260/1261 [28:10<00:01,  1.34s/it]
+    
+
+    [MoviePy] Done.
+    [MoviePy] >>>> Video ready: Videos/project_video_output.mp4 
+    
+    Wall time: 28min 11s
+    
+
 
 ```python
 HTML("""
@@ -1484,6 +1664,17 @@ HTML("""
 </video>
 """.format(project_video_output))
 ```
+
+
+
+
+
+<video width="960" height="540" controls>
+  <source src="Videos/project_video_output.mp4">
+</video>
+
+
+
 
 ## Step 8 : Potential gaps and improvement techniques.
 The pipeline created above to detect vehicles works well in a constrained set of conditions. The pipeline may fail to detect vehicles in the dark and if the lighting conditions are not appropriate.
