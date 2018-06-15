@@ -1,4 +1,4 @@
-
+﻿
 # Vehicle Detection Project
 
 The goal of this project is to write a pipeline to detect vehicles in an image and run the pipeline on a video stream.
@@ -104,11 +104,11 @@ plt.title('Not Car 3')
 
 
 
-![png](/Markdown_files/output_5_1.png)
+![png](./Markdown_files/output_5_1.png)
 
 
 
-![png](/Markdown_files/output_5_2.png)
+![png](./Markdown_files/output_5_2.png)
 
 
 ## Step 3: Feature Selection
@@ -206,15 +206,15 @@ plt.show()
 ```
 
 
-![png](/Markdown_files/output_12_0.png)
+![png](./Markdown_files/output_12_0.png)
 
 
 
-![png](/Markdown_files/output_12_1.png)
+![png](./Markdown_files/output_12_1.png)
 
 
 
-![png](/Markdown_files/output_12_2.png)
+![png](./Markdown_files/output_12_2.png)
 
 
 #### HSV Color Space
@@ -231,11 +231,11 @@ plt.show()
 ```
 
 
-![png](/Markdown_files/output_14_0.png)
+![png](./Markdown_files/output_14_0.png)
 
 
 
-![png](/Markdown_files/output_14_1.png)
+![png](./Markdown_files/output_14_1.png)
 
 
 #### LUV Color Space
@@ -252,11 +252,11 @@ plt.show()
 ```
 
 
-![png](/Markdown_files/output_16_0.png)
+![png](./Markdown_files/output_16_0.png)
 
 
 
-![png](/Markdown_files/output_16_1.png)
+![png](./Markdown_files/output_16_1.png)
 
 
 #### YCrCb Color Space
@@ -273,11 +273,11 @@ plt.show()
 ```
 
 
-![png](/Markdown_files/output_18_0.png)
+![png](./Markdown_files/output_18_0.png)
 
 
 
-![png](/Markdown_files/output_18_1.png)
+![png](./Markdown_files/output_18_1.png)
 
 
 After exploring different color spaces, it appears that the pixels in LUV color space appear to cluster well for car images. Hence our desired color space for generating features is LUV. 
@@ -353,11 +353,11 @@ hist_features = color_hist(img_converted, nbins=32, bins_range=(0, 256), plot = 
 ```
 
 
-![png](/Markdown_files/output_22_0.png)
+![png](./Markdown_files/output_22_0.png)
 
 
 
-![png](/Markdown_files/output_22_1.png)
+![png](./Markdown_files/output_22_1.png)
 
 
 ### Step 3.3: Spatial Binning
@@ -408,19 +408,19 @@ spatial_features = bin_spatial(img_converted, size=(32, 32), plot = True)
 ```
 
 
-![png](/Markdown_files/output_24_0.png)
+![png](./Markdown_files/output_24_0.png)
 
 
 
-![png](/Markdown_files/output_24_1.png)
+![png](./Markdown_files/output_24_1.png)
 
 
 
-![png](/Markdown_files/output_24_2.png)
+![png](./Markdown_files/output_24_2.png)
 
 
 
-![png](/Markdown_files/output_24_3.png)
+![png](./Markdown_files/output_24_3.png)
 
 
 ### Step 3.4: Histogram of Oriented Gradient features
@@ -575,27 +575,27 @@ for i in range(3):
 ```
 
 
-![png](/Markdown_files/output_27_0.png)
+![png](./Markdown_files/output_27_0.png)
 
 
 
-![png](/Markdown_files/output_27_1.png)
+![png](./Markdown_files/output_27_1.png)
 
 
 
-![png](/Markdown_files/output_27_2.png)
+![png](./Markdown_files/output_27_2.png)
 
 
 
-![png](/Markdown_files/output_27_3.png)
+![png](./Markdown_files/output_27_3.png)
 
 
 
-![png](/Markdown_files/output_27_4.png)
+![png](./Markdown_files/output_27_4.png)
 
 
 
-![png](/Markdown_files/output_27_5.png)
+![png](./Markdown_files/output_27_5.png)
 
 
 Tried the following combinations of HOG parameters
@@ -967,11 +967,11 @@ if model_train_YN:
     
 
 
-![png](/Markdown_files/output_37_1.png)
+![png](./Markdown_files/output_37_1.png)
 
 
 
-![png](/Markdown_files/output_37_2.png)
+![png](./Markdown_files/output_37_2.png)
 
 
     Neural_Network Test Set Accuracy: 0.994020
@@ -1013,7 +1013,7 @@ if model_train_YN:
     
 
 
-![png](/Markdown_files/output_39_1.png)
+![png](./Markdown_files/output_39_1.png)
 
 
     SVM Classifier Accuracy: 0.975545
@@ -1054,11 +1054,11 @@ if model_train_YN:
     
 
 
-![png](/Markdown_files/output_41_1.png)
+![png](./Markdown_files/output_41_1.png)
 
 
 
-![png](/Markdown_files/output_41_2.png)
+![png](./Markdown_files/output_41_2.png)
 
 
     SGD Classifier Accuracy: 0.962089
@@ -1414,43 +1414,43 @@ for path in test_images_paths:
     
 
 
-![png](/Markdown_files/output_52_1.png)
+![png](./Markdown_files/output_52_1.png)
 
 
 
-![png](/Markdown_files/output_52_2.png)
+![png](./Markdown_files/output_52_2.png)
 
 
 
-![png](/Markdown_files/output_52_3.png)
+![png](./Markdown_files/output_52_3.png)
 
 
 
-![png](/Markdown_files/output_52_4.png)
+![png](./Markdown_files/output_52_4.png)
 
 
 
-![png](/Markdown_files/output_52_5.png)
+![png](./Markdown_files/output_52_5.png)
 
 
 
-![png](/Markdown_files/output_52_6.png)
+![png](./Markdown_files/output_52_6.png)
 
 
 
-![png](/Markdown_files/output_52_7.png)
+![png](./Markdown_files/output_52_7.png)
 
 
 
-![png](/Markdown_files/output_52_8.png)
+![png](./Markdown_files/output_52_8.png)
 
 
 
-![png](/Markdown_files/output_52_9.png)
+![png](./Markdown_files/output_52_9.png)
 
 
 
-![png](/Markdown_files/output_52_10.png)
+![png](./Markdown_files/output_52_10.png)
 
 
 ### Test SVM Model Performance
@@ -1478,43 +1478,43 @@ for path in test_images_paths:
     
 
 
-![png](/Markdown_files/output_54_1.png)
+![png](./Markdown_files/output_54_1.png)
 
 
 
-![png](/Markdown_files/output_54_2.png)
+![png](./Markdown_files/output_54_2.png)
 
 
 
-![png](/Markdown_files/output_54_3.png)
+![png](./Markdown_files/output_54_3.png)
 
 
 
-![png](/Markdown_files/output_54_4.png)
+![png](./Markdown_files/output_54_4.png)
 
 
 
-![png](/Markdown_files/output_54_5.png)
+![png](./Markdown_files/output_54_5.png)
 
 
 
-![png](/Markdown_files/output_54_6.png)
+![png](./Markdown_files/output_54_6.png)
 
 
 
-![png](/Markdown_files/output_54_7.png)
+![png](./Markdown_files/output_54_7.png)
 
 
 
-![png](/Markdown_files/output_54_8.png)
+![png](./Markdown_files/output_54_8.png)
 
 
 
-![png](/Markdown_files/output_54_9.png)
+![png](./Markdown_files/output_54_9.png)
 
 
 
-![png](/Markdown_files/output_54_10.png)
+![png](./Markdown_files/output_54_10.png)
 
 
 ### Test SGD Model Performance
@@ -1542,43 +1542,43 @@ for path in test_images_paths:
     
 
 
-![png](/Markdown_files/output_56_1.png)
+![png](./Markdown_files/output_56_1.png)
 
 
 
-![png](/Markdown_files/output_56_2.png)
+![png](./Markdown_files/output_56_2.png)
 
 
 
-![png](/Markdown_files/output_56_3.png)
+![png](./Markdown_files/output_56_3.png)
 
 
 
-![png](/Markdown_files/output_56_4.png)
+![png](./Markdown_files/output_56_4.png)
 
 
 
-![png](/Markdown_files/output_56_5.png)
+![png](./Markdown_files/output_56_5.png)
 
 
 
-![png](/Markdown_files/output_56_6.png)
+![png](./Markdown_files/output_56_6.png)
 
 
 
-![png](/Markdown_files/output_56_7.png)
+![png](./Markdown_files/output_56_7.png)
 
 
 
-![png](/Markdown_files/output_56_8.png)
+![png](./Markdown_files/output_56_8.png)
 
 
 
-![png](/Markdown_files/output_56_9.png)
+![png](./Markdown_files/output_56_9.png)
 
 
 
-![png](/Markdown_files/output_56_10.png)
+![png](./Markdown_files/output_56_10.png)
 
 
 It is very evident that Neural Network classifier outperforms both Support Vector Machine classifier and Stochastic Gradient Descent classifier. Hence, we'll use Neural Network to test on Project videos.
