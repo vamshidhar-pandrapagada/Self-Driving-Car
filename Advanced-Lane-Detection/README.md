@@ -1,4 +1,4 @@
-
+﻿
 ## Goal of this Project
 The goal of this project to write a software pipeline to identify the lane boundaries in a video from a front-facing camera on a car. Use various techniques (described in detail below) to identify and draw the inside of a lane, compute lane curvature, and even estimate the vehicle's position relative to the center of the lane
 
@@ -24,27 +24,27 @@ Take multiple images of chess board places against a flat surface from different
 In Short, map distorted points in a distorted chess image to undistorted points to un-distort any images.
 
 
-![png](./Markdown_files/output_8_0.png)
+![png](./Markdown_Files/output_8_0.png)
 
 
 
-![png](./Markdown_files/output_8_1.png)
+![png](./Markdown_Files/output_8_1.png)
 
 
 
-![png](./Markdown_files/output_8_2.png)
+![png](./Markdown_Files/output_8_2.png)
 
 
 
-![png](./Markdown_files/output_8_3.png)
+![png](./Markdown_Files/output_8_3.png)
 
 
 
-![png](./Markdown_files/output_8_4.png)
+![png](./Markdown_Files/output_8_4.png)
 
 
 
-![png](./Markdown_files/output_8_5.png)
+![png](./Markdown_Files/output_8_5.png)
 
 
 ## Step 2: Calibrate Camera and Distortion Correction
@@ -54,60 +54,60 @@ OpenCV function cv2.calibrateCamera() takes in image points,object points and sh
 Next step we need is to undistort an image. We can do this using OpenCV's cv2.undistort() function which takes in the image, camera matrix and distortion coeffecients and returns undistorted/ destination image.
 
 
-![png](./Markdown_files/output_12_0.png)
+![png](./Markdown_Files/output_12_0.png)
 
 
 
-![png](./Markdown_files/output_12_1.png)
+![png](./Markdown_Files/output_12_1.png)
 
 
 
-![png](./Markdown_files/output_12_2.png)
+![png](./Markdown_Files/output_12_2.png)
 
 
 
-![png](./Markdown_files/output_12_3.png)
+![png](./Markdown_Files/output_12_3.png)
 
 
 
-![png](./Markdown_files/output_12_4.png)
+![png](./Markdown_Files/output_12_4.png)
 
 
 ### Test Undistortion on Car-Road Images
 
-![png](./Markdown_files/output_15_0.png)
+![png](./Markdown_Files/output_15_0.png)
 
 
 
-![png](./Markdown_files/output_15_1.png)
+![png](./Markdown_Files/output_15_1.png)
 
 
 
-![png](./Markdown_files/output_15_2.png)
+![png](./Markdown_Files/output_15_2.png)
 
 
 
-![png](./Markdown_files/output_15_3.png)
+![png](./Markdown_Files/output_15_3.png)
 
 
 
-![png](./Markdown_files/output_15_4.png)
+![png](./Markdown_Files/output_15_4.png)
 
 
 
-![png](./Markdown_files/output_15_5.png)
+![png](./Markdown_Files/output_15_5.png)
 
 
 
-![png](./Markdown_files/output_15_6.png)
+![png](./Markdown_Files/output_15_6.png)
 
 
 
-![png](./Markdown_files/output_15_7.png)
+![png](./Markdown_Files/output_15_7.png)
 
 
 
-![png](./Markdown_files/output_15_8.png)
+![png](./Markdown_Files/output_15_8.png)
 
 
 ## Step 3: Explore Color Spaces
@@ -137,19 +137,19 @@ Observe that the Blue channel completely obscures the Yellow line on the left. A
 Red Channel does do a reasonable good job.
 
 
-![png](./Markdown_files/output_19_0.png)
+![png](./Markdown_Files/output_19_0.png)
 
 
 
-![png](./Markdown_files/output_19_1.png)
+![png](./Markdown_Files/output_19_1.png)
 
 
 
-![png](./Markdown_files/output_19_2.png)
+![png](./Markdown_Files/output_19_2.png)
 
 
 
-![png](./Markdown_files/output_19_3.png)
+![png](./Markdown_Files/output_19_3.png)
 
 
 #### Let's examine Images of each individual channel of HLS image ####
@@ -158,19 +158,19 @@ S channel does a fairly good job of picking up the lines under very different co
 
 
 
-![png](./Markdown_files/output_21_0.png)
+![png](./Markdown_Files/output_21_0.png)
 
 
 
-![png](./Markdown_files/output_21_1.png)
+![png](./Markdown_Files/output_21_1.png)
 
 
 
-![png](./Markdown_files/output_21_2.png)
+![png](./Markdown_Files/output_21_2.png)
 
 
 
-![png](./Markdown_files/output_21_3.png)
+![png](./Markdown_Files/output_21_3.png)
 
 
 
@@ -184,19 +184,19 @@ Our observations earlier helped us understand the individual channels in HLS ima
 
 
 
-![png](./Markdown_files/output_26_0.png)
+![png](./Markdown_Files/output_26_0.png)
 
 
 
-![png](./Markdown_files/output_26_1.png)
+![png](./Markdown_Files/output_26_1.png)
 
 
 
-![png](./Markdown_files/output_26_2.png)
+![png](./Markdown_Files/output_26_2.png)
 
 
 
-![png](./Markdown_files/output_26_3.png)
+![png](./Markdown_Files/output_26_3.png)
 
 
 Taking the gradient in the x direction emphasizes edges closer to vertical. Alternatively, taking the gradient in the y direction emphasizes edges closer to horizontal.  
@@ -219,11 +219,11 @@ For a gradient in both the x and y directions, the magnitude is the square root 
 Let's read an image and see how Gradient thresholds work. Threshold range 30 to 190, increased kernel size to 7 seems to work well and picks up all the lanes the vehicle is in.
 
 
-![png](./Markdown_files/output_30_0.png)
+![png](./Markdown_Files/output_30_0.png)
 
 
 
-![png](./Markdown_files/output_30_1.png)
+![png](./Markdown_Files/output_30_1.png)
 
 
 ###  Direction of the Gradient
@@ -238,11 +238,11 @@ An orientation of 0 implies a vertical line and orientations of +/- pi/2 imply h
 Let's read an image and see how Direction thresholds work. Threshold range 0.6 to 1.4 seems to work well combined with the kernel size  of 15.
 
 
-![png](./Markdown_files/output_33_0.png)
+![png](./Markdown_Files/output_33_0.png)
 
 
 
-![png](./Markdown_files/output_33_1.png)
+![png](./Markdown_Files/output_33_1.png)
 
 
 ###  Combining Thresholds
@@ -263,39 +263,39 @@ Before generating the final image, apply the region of interest to mask unnecess
 **Final Images on the right side isolate lane lines**
 
 
-![png](./Markdown_files/output_37_0.png)
+![png](./Markdown_Files/output_37_0.png)
 
 
 
-![png](./Markdown_files/output_37_1.png)
+![png](./Markdown_Files/output_37_1.png)
 
 
 
-![png](./Markdown_files/output_37_2.png)
+![png](./Markdown_Files/output_37_2.png)
 
 
 
-![png](./Markdown_files/output_37_3.png)
+![png](./Markdown_Files/output_37_3.png)
 
 
 
-![png](./Markdown_files/output_37_4.png)
+![png](./Markdown_Files/output_37_4.png)
 
 
 
-![png](./Markdown_files/output_37_5.png)
+![png](./Markdown_Files/output_37_5.png)
 
 
 
-![png](./Markdown_files/output_37_6.png)
+![png](./Markdown_Files/output_37_6.png)
 
 
 
-![png](./Markdown_files/output_37_7.png)
+![png](./Markdown_Files/output_37_7.png)
 
 
 
-![png](./Markdown_files/output_37_8.png)
+![png](./Markdown_Files/output_37_8.png)
 
 
 ## Step 4: Perspective Transform
@@ -319,35 +319,35 @@ Build the pipeline to construct all the above steps in sequence to get the final
 8. Final warped image along with the Mapping matrix to unwarp the image later
 
 
-![png](./Markdown_files/output_43_0.png)
+![png](./Markdown_Files/output_43_0.png)
 
 
 
-![png](./Markdown_files/output_43_1.png)
+![png](./Markdown_Files/output_43_1.png)
 
 
 
-![png](./Markdown_files/output_43_2.png)
+![png](./Markdown_Files/output_43_2.png)
 
 
 
-![png](./Markdown_files/output_43_3.png)
+![png](./Markdown_Files/output_43_3.png)
 
 
 
-![png](./Markdown_files/output_43_4.png)
+![png](./Markdown_Files/output_43_4.png)
 
 
 
-![png](./Markdown_files/output_43_5.png)
+![png](./Markdown_Files/output_43_5.png)
 
 
 
-![png](./Markdown_files/output_43_6.png)
+![png](./Markdown_Files/output_43_6.png)
 
 
 
-![png](./Markdown_files/output_43_7.png)
+![png](./Markdown_Files/output_43_7.png)
 
 
 ## Step 6: Locate Lane Lines
@@ -359,11 +359,11 @@ Computing a histogram along all the columns in the lower half of the image as sh
 
 
 
-![png](./Markdown_files/output_45_1.png)
+![png](./Markdown_Files/output_45_1.png)
 
 
 
-![png](./Markdown_files/output_45_2.png)
+![png](./Markdown_Files/output_45_2.png)
 
 
 ### 6.2 Sliding Window
@@ -376,35 +376,35 @@ From that point, we can use a sliding window, placed around the line centers, to
 ### Visualize the result on test images
 
 
-![png](./Markdown_files/output_50_0.png)
+![png](./Markdown_Files/output_50_0.png)
 
 
 
-![png](./Markdown_files/output_50_1.png)
+![png](./Markdown_Files/output_50_1.png)
 
 
 
-![png](./Markdown_files/output_50_2.png)
+![png](./Markdown_Files/output_50_2.png)
 
 
 
-![png](./Markdown_files/output_50_3.png)
+![png](./Markdown_Files/output_50_3.png)
 
 
 
-![png](./Markdown_files/output_50_4.png)
+![png](./Markdown_Files/output_50_4.png)
 
 
 
-![png](./Markdown_files/output_50_5.png)
+![png](./Markdown_Files/output_50_5.png)
 
 
 
-![png](./Markdown_files/output_50_6.png)
+![png](./Markdown_Files/output_50_6.png)
 
 
 
-![png](./Markdown_files/output_50_7.png)
+![png](./Markdown_Files/output_50_7.png)
 
 
 ### 6.3 Continous polyfit
@@ -412,7 +412,7 @@ Now, we know where the lines are in the fit.  In the next frame of video we don'
 
 #### Lets now test it out on 2 continous frames of image
 
-![png](./Markdown_files/output_54_1.png)
+![png](./Markdown_Files/output_54_1.png)
 
 
 The green shaded area shows where we searched for the lines this time. So, once you know where the lines are in one frame of video, you can do a highly targeted search for them in the next frame. This is equivalent to using a customized region of interest for each frame of video, and should help us track the lanes through sharp curves and tricky conditions. If you lose track of the lines, go back to sliding_window_polyfit() search to rediscover them.
@@ -425,7 +425,7 @@ You slide your window template across the image from left to right and any overl
 
 Now let's try using convolutions to find the best window center positions in a thresholded road image. The code below allows you to experiment with using convolutions for a sliding window search function. We gave it a try but this method is not used in this project
 
-![png](./Markdown_files/output_57_0.png)
+![png](./Markdown_Files/output_57_0.png)
 
 
 ### 6.4 Measuring Curvature
@@ -435,7 +435,7 @@ Compute the radius of curvature of the fit using the following formulae.
 ### 6.4 Draw Lane and Data on Image
 
 
-![png](./Markdown_files/output_63_1.png)
+![png](./Markdown_Files/output_63_1.png)
 
 
 ### 6.5 Track detections on continous stream of images
@@ -463,7 +463,7 @@ Build this final pipeline to track detections on continuous stream of images.
 Use our Vehicle detection pipeline to detect both Lanes and Vehicles.
 
 
-![png](./Markdown_files/output_72_1.png)
+![png](./Markdown_Files/output_72_1.png)
 
 <video width="960" height="540" controls>
   <source src="./Videos/project_video_output.mp4">
