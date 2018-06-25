@@ -1,4 +1,4 @@
-﻿
+
 ## Goal of this Project
 The goal of this project to write a software pipeline to identify the lane boundaries in a video from a front-facing camera on a car. Use various techniques (described in detail below) to identify and draw the inside of a lane, compute lane curvature, and even estimate the vehicle's position relative to the center of the lane
 
@@ -22,6 +22,7 @@ We can take pictures of any known shapes and detect the distortion errors. Ideal
 **How do we use chess board to do distortion correction?**  
 Take multiple images of chess board places against a flat surface from different angles and detect the distortion by looking at the difference between the size/shape of the squares in the images vs size/shape of the squares in the actual undistorted image.  Use this difference information to calibrate the images taken from the camera.  
 In Short, map distorted points in a distorted chess image to undistorted points to un-distort any images.
+
 
 
 ![png](./Markdown_Files/output_8_0.png)
@@ -157,7 +158,6 @@ At first look, S channel does an excellent job in picking up the lane lines. Exp
 S channel does a fairly good job of picking up the lines under very different color and contrast conditions, while the other selections look messy. After experimenting with several thresholds, the range (180,255) gave us a good result.
 
 
-
 ![png](./Markdown_Files/output_21_0.png)
 
 
@@ -181,7 +181,6 @@ Applying the Sobel operator to an image is a way of taking the derivative of the
 
 Let's read an image and observe how sobel threshold applied in x and y orientations gives us different results. 
 Our observations earlier helped us understand the individual channels in HLS image pick up lanes well and L&S channel do a good job of all. In this experiment, we'll use HLS's L&S channels to apply sobel operator.  
-
 
 
 ![png](./Markdown_Files/output_26_0.png)
@@ -263,39 +262,39 @@ Before generating the final image, apply the region of interest to mask unnecess
 **Final Images on the right side isolate lane lines**
 
 
-![png](./Markdown_Files/output_37_0.png)
+![png](./Markdown_Files/output_38_0.png)
 
 
 
-![png](./Markdown_Files/output_37_1.png)
+![png](./Markdown_Files/output_38_1.png)
 
 
 
-![png](./Markdown_Files/output_37_2.png)
+![png](./Markdown_Files/output_38_2.png)
 
 
 
-![png](./Markdown_Files/output_37_3.png)
+![png](./Markdown_Files/output_38_3.png)
 
 
 
-![png](./Markdown_Files/output_37_4.png)
+![png](./Markdown_Files/output_38_4.png)
 
 
 
-![png](./Markdown_Files/output_37_5.png)
+![png](./Markdown_Files/output_38_5.png)
 
 
 
-![png](./Markdown_Files/output_37_6.png)
+![png](./Markdown_Files/output_38_6.png)
 
 
 
-![png](./Markdown_Files/output_37_7.png)
+![png](./Markdown_Files/output_38_7.png)
 
 
 
-![png](./Markdown_Files/output_37_8.png)
+![png](./Markdown_Files/output_38_8.png)
 
 
 ## Step 4: Perspective Transform
@@ -319,35 +318,36 @@ Build the pipeline to construct all the above steps in sequence to get the final
 8. Final warped image along with the Mapping matrix to unwarp the image later
 
 
-![png](./Markdown_Files/output_43_0.png)
+
+![png](./Markdown_Files/output_44_0.png)
 
 
 
-![png](./Markdown_Files/output_43_1.png)
+![png](./Markdown_Files/output_44_1.png)
 
 
 
-![png](./Markdown_Files/output_43_2.png)
+![png](./Markdown_Files/output_44_2.png)
 
 
 
-![png](./Markdown_Files/output_43_3.png)
+![png](./Markdown_Files/output_44_3.png)
 
 
 
-![png](./Markdown_Files/output_43_4.png)
+![png](./Markdown_Files/output_44_4.png)
 
 
 
-![png](./Markdown_Files/output_43_5.png)
+![png](./Markdown_Files/output_44_5.png)
 
 
 
-![png](./Markdown_Files/output_43_6.png)
+![png](./Markdown_Files/output_44_6.png)
 
 
 
-![png](./Markdown_Files/output_43_7.png)
+![png](./Markdown_Files/output_44_7.png)
 
 
 ## Step 6: Locate Lane Lines
@@ -357,13 +357,11 @@ After applying calibration, thresholding, and a perspective transform to a road 
 
 Computing a histogram along all the columns in the lower half of the image as shown below
 
-
-
-![png](./Markdown_Files/output_45_1.png)
+![png](./Markdown_Files/output_46_1.png)
 
 
 
-![png](./Markdown_Files/output_45_2.png)
+![png](./Markdown_Files/output_46_2.png)
 
 
 ### 6.2 Sliding Window
@@ -376,44 +374,45 @@ From that point, we can use a sliding window, placed around the line centers, to
 ### Visualize the result on test images
 
 
-![png](./Markdown_Files/output_50_0.png)
+![png](./Markdown_Files/output_51_0.png)
 
 
 
-![png](./Markdown_Files/output_50_1.png)
+![png](./Markdown_Files/output_51_1.png)
 
 
 
-![png](./Markdown_Files/output_50_2.png)
+![png](./Markdown_Files/output_51_2.png)
 
 
 
-![png](./Markdown_Files/output_50_3.png)
+![png](./Markdown_Files/output_51_3.png)
 
 
 
-![png](./Markdown_Files/output_50_4.png)
+![png](./Markdown_Files/output_51_4.png)
 
 
 
-![png](./Markdown_Files/output_50_5.png)
+![png](./Markdown_Files/output_51_5.png)
 
 
 
-![png](./Markdown_Files/output_50_6.png)
+![png](./Markdown_Files/output_51_6.png)
 
 
 
-![png](./Markdown_Files/output_50_7.png)
+![png](./Markdown_Files/output_51_7.png)
 
 
 ### 6.3 Continous polyfit
 Now, we know where the lines are in the fit.  In the next frame of video we don't need to do a blind search again, but instead we can just search in a margin around the previous line position.
 
+
 #### Lets now test it out on 2 continous frames of image
 
-![png](./Markdown_Files/output_54_1.png)
 
+![png](./Markdown_Files/output_55_1.png)
 
 The green shaded area shows where we searched for the lines this time. So, once you know where the lines are in one frame of video, you can do a highly targeted search for them in the next frame. This is equivalent to using a customized region of interest for each frame of video, and should help us track the lanes through sharp curves and tricky conditions. If you lose track of the lines, go back to sliding_window_polyfit() search to rediscover them.
 
@@ -425,17 +424,19 @@ You slide your window template across the image from left to right and any overl
 
 Now let's try using convolutions to find the best window center positions in a thresholded road image. The code below allows you to experiment with using convolutions for a sliding window search function. We gave it a try but this method is not used in this project
 
-![png](./Markdown_Files/output_57_0.png)
+
+![png](./Markdown_Files/output_58_0.png)
 
 
 ### 6.4 Measuring Curvature
 Compute the radius of curvature of the fit using the following formulae.
 ![](document_images/Radius_of_curvature.jpg)
 
+
 ### 6.4 Draw Lane and Data on Image
 
 
-![png](./Markdown_Files/output_63_1.png)
+![png](./Markdown_Files/output_64_1.png)
 
 
 ### 6.5 Track detections on continous stream of images
@@ -459,15 +460,26 @@ Even when everything is working, line detections will jump around from frame to 
 ### 6.6 Track detections on continuous stream of images
 Build this final pipeline to track detections on continuous stream of images.
 
+### Set Parameters
+
 ### 6.7 Combine Vehicle Detections
 Use our Vehicle detection pipeline to detect both Lanes and Vehicles.
 
+![png](./Markdown_Files/output_75_0.png)
 
-![png](./Markdown_Files/output_72_1.png)
+
+### 6.8 Test on Project Video
+
 
 <video width="960" height="540" controls>
-  <source src="./Videos/project_video_output.mp4">
+  <source src="Videos/project_video_output.mp4">
 </video>
 
 
 
+
+## Model Short comings: Potential points of Failure
+The model perform reasonable well if the Road curvature and lighting conditions are constant. This model was not able to deliver good results at all on Harder challenge video. We can explore the following options to improve the pipeline:
+1. Use LAB color space to apply Gradient and Direction thresholds.
+2. Use convolutions instead of sliding windows to identify hot pixels
+3. Use more advanced computer vision techniques to detect lanes while driving on extremely curvy roads.
